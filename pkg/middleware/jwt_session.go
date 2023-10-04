@@ -60,7 +60,10 @@ func (j *jwtSessionLoader) loadSession(next http.Handler) http.Handler {
 // getJwtSession loads a session based on a JWT token in the authorization header.
 // (see the config options skip-jwt-bearer-tokens and extra-jwt-issuers)
 func (j *jwtSessionLoader) getJwtSession(req *http.Request) (*sessionsapi.SessionState, error) {
-	auth := req.Header.Get("Proxy-Authorization")
+	auth := req.Header.Get("OAuthProxy-Authorization")
+	if auth == "" {
+		auth = req.Header.Get("Proxy-Authorization")
+	}
 	if auth == "" {
 		auth = req.Header.Get("Authorization")
 	}
